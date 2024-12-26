@@ -5,10 +5,14 @@ const buttonDecrementar = document.getElementById("decrementar");
 let number = 0;
 contador.textContent = number;
 
+//* crear un broadcast channel
+const channel = new BroadcastChannel('contador');
 
 buttonIncrementar.addEventListener('click', () => {
   number++;
   contador.textContent = number;
+  //* enviamos la informacion al broadcast channel
+  channel.postMessage(number);
 })
 
 buttonDecrementar.addEventListener('click', () => {
@@ -17,4 +21,13 @@ buttonDecrementar.addEventListener('click', () => {
     number = 0
   }
   contador.textContent = number;
+  //* enviamos la informacion al broadcast channel
+  channel.postMessage(number);
 })
+
+//* escuchamos el broadcast channel
+channel.onmessage = (event) => {
+  const number = event.data;
+  contador.textContent = number;
+}
+
